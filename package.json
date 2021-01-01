@@ -1,0 +1,21 @@
+{
+  "name": "gus-data-provider",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "xlsx": "^0.16.9"
+  },
+  "scripts": {
+    "update": "node update.js",
+    "start": "node index.js",
+    "dev": "node index.js",
+    "grab-data": "curl https://stat.gov.pl/download/gfx/portalinformacyjny/pl/defaultaktualnosci/5468/39/2/1/zgony_wedlug_tygodni_v2.zip --output xlsx/data.zip; ditto -V -x -k --sequesterRsrc --rsrc xlsx/data.zip ./xlsx/"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10"
+  }
+}
