@@ -15,11 +15,14 @@ app.get("/settings", (_, res) => {
 
 app.get("/data", (req, res) => {
   const { paths } = req.query;
+  if (!paths) throw new Error("No paths provided!");
   const ret = JSON.parse(paths).reduce(
     (acc, path) => {
-      const [group, year] = path.split(".");
-      if (!acc[group]) acc[group] = {};
-      acc[group][year] = data[group][year];
+      const [gender, year] = path.split(".");
+      if (!data[gender] || !data[gender][year])
+        throw new Error(`No data entries for path "${path}"`);
+      if (!acc[gender]) acc[gender] = {};
+      acc[gender][year] = data[gender][year];
       return acc;
     },
 

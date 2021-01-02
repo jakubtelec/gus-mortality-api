@@ -14,7 +14,8 @@ const files = fs
   .filter((fileName) => fileName.includes("xlsx"))
   .sort();
 
-const data = {};
+const data = {},
+  regions = {};
 
 for (let fileName of files) {
   const year = fileName.split("_")[1].split(".")[0];
@@ -23,9 +24,8 @@ for (let fileName of files) {
   const workbook = XLSX.readFile(DATA_DIR + "/" + fileName);
 
   ["general", "males", "females"].forEach((keyName, sheetidx) => {
-    // console.log(`Stitching ${keyName}`);
-
     const yearData = {};
+
     if (!data[keyName]) {
       data[keyName] = { [year]: yearData };
     } else {
@@ -35,7 +35,8 @@ for (let fileName of files) {
     for (const row of rawData.slice(6)) {
       const [age, code, name, ...byWeek] = values(row);
       if (!yearData[name]) yearData[name] = { [age]: {} };
-      yearData[name][age] = { name, code, byWeek };
+      regions[name] = code;
+      yearData[name][age] = byWeek;
     }
   });
   console.timeEnd(`Reading data for ${year}`);
@@ -44,10 +45,6 @@ for (let fileName of files) {
 const metaPick = data.general;
 
 const years = keys(metaPick);
-
-const regions = values(pickFirst(metaPick))
-  .map((item) => pickFirst(item))
-  .map(({ name, code }) => ({ name, code }));
 
 const ageGroups = keys(pickFirst(pickFirst(metaPick)));
 
