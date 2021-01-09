@@ -6,16 +6,21 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-rate-limit": "^5.2.3",
+    "lodash": "^4.17.20",
     "xlsx": "^0.16.9"
   },
   "scripts": {
     "update": "node update.js",
     "start": "node index.js",
     "dev": "node index.js",
-    "grab-data": "curl https://stat.gov.pl/download/gfx/portalinformacyjny/pl/defaultaktualnosci/5468/39/2/1/zgony_wedlug_tygodni_v2.zip --output xlsx/data.zip; ditto -V -x -k --sequesterRsrc --rsrc xlsx/data.zip ./xlsx/"
+    "grab-data": "curl https://stat.gov.pl/download/gfx/portalinformacyjny/pl/defaultaktualnosci/5468/39/2/1/zgony_wedlug_tygodni_v2.zip --output xlsx/data.zip; unzip xlsx/data.zip -d ./xlsx/",
+    "test": "jest"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
-    "@babel/node": "^7.12.10"
+    "@babel/node": "^7.12.10",
+    "eslint": "^7.17.0",
+    "jest": "^26.6.3"
   }
 }
