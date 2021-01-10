@@ -1,6 +1,6 @@
 # GUS Mortality API
 
-Simple API providing weekly mortality rates aggregated by [GUS](https://stat.gov.pl/) - used by [GUS Browser app](https://github.com/jakubtelec/gus-browser) frontend.
+Simple API providing weekly ([ISO 8601 week dates norm](https://en.wikipedia.org/wiki/ISO_8601#Week_dates)) mortality rates aggregated by [GUS](https://stat.gov.pl/) - used by [GUS Browser app](https://github.com/jakubtelec/gus-browser) frontend.
 
 ## API description:
 
@@ -28,7 +28,7 @@ https://gus-mortality-api.herokuapp.com/
 
   ### Request:
 
-  Accepts `paths` param containing array of path arrays. Single path array contains: [**gender, year/years range, region, age group/age groups range**]:
+  Accepts `paths` param containing array of paths. Single path is array contains: [**gender, year/years range, region, age group/age groups range**]:
 
   - **gender** : _string_, accepted values: `"general"`, `"males"`, `"females"`
   - **year** : _string_, accepted values: stored in `defs.years` (see `/settings` entry below), e.g. `"2010"`, `"2020"`
@@ -39,10 +39,10 @@ https://gus-mortality-api.herokuapp.com/
 
   General rules:
 
-  - **current requests rate limit for `/data/` entry is 45 requests/minute**
-  - partial paths are accepted, but inimum length: 3 (e.g. path `["general","2010","Polska"]` is valid)
-  - reversing years order and age groups order is accepted (e.g. path `["general",["2012","2010"],"Polska"]` is valid)
-  - API detects wrong names (e.g. `"0 -4 "` instead of `"0 - 4"` in age ranges) and throws error with basic information about its cause.
+  - **current requests rate limit for `/data` entry is 45 requests per minute**
+  - partial paths are accepted, but minimum length of path is 3 (e.g. path `["general","2010","Polska"]` is valid, `["general","2010"]` does not work)
+  - reversing years order and age groups order is possible (e.g. path `["general",["2012","2010"],"Polska"]` is valid)
+  - API detects wrong naming of paths entries (e.g. `"0 -4 "` instead of `"0 - 4"` in age ranges) and throws errors with basic information attached.
 
   Example request with async JS `fetch`:
 
@@ -65,7 +65,7 @@ https://gus-mortality-api.herokuapp.com/
 
   **Important**: API uses deep merge to stitch picked data into **single response object**.
 
-  Response structure: `{[genders][years][regions][age groups]}`
+  Response object structure: `{[genders][years][regions][age groups]}`
 
   Response from example request above:
 
@@ -74,78 +74,50 @@ https://gus-mortality-api.herokuapp.com/
     "general": {
       "2010": {
         "Polska": {
-          "0 - 4": [
-            /** array of weekly deaths number**/
-          ],
-          "10 - 14": [
-            /** array of weekly deaths number**/
-          ],
-          "5 - 9": [
-            /** array of weekly deaths number**/
-          ]
+          "0 - 4": ["/** array of weekly deaths number**/"],
+          "10 - 14": ["/** array of weekly deaths number**/"],
+          "5 - 9": ["/** array of weekly deaths number**/"]
         }
       }
     },
     "females": {
       "2000": {
         "Miasto Kraków": {
-          "20 - 24": [
-            /** array of weekly deaths number**/
-          ],
-          "25 - 29": [
-            /** array of weekly deaths number**/
-          ]
+          "20 - 24": ["/** array of weekly deaths number**/"],
+          "25 - 29": ["/** array of weekly deaths number**/"]
         }
       },
       "2001": {
         "Miasto Kraków": {
-          "20 - 24": [
-            /** array of weekly deaths number**/
-          ],
-          "25 - 29": [
-            /** array of weekly deaths number**/
-          ]
+          "20 - 24": ["/** array of weekly deaths number**/"],
+          "25 - 29": ["/** array of weekly deaths number**/"]
         }
       },
       "2002": {
         "Miasto Kraków": {
-          "20 - 24": [
-            /** array of weekly deaths number**/
-          ],
-          "25 - 29": [
-            /** array of weekly deaths number**/
-          ]
+          "20 - 24": ["/** array of weekly deaths number**/"],
+          "25 - 29": ["/** array of weekly deaths number**/"]
         }
       },
       "2003": {
         "Miasto Kraków": {
-          "20 - 24": [
-            /** array of weekly deaths number**/
-          ],
-          "25 - 29": [
-            /** array of weekly deaths number**/
-          ]
+          "20 - 24": ["/** array of weekly deaths number**/"],
+          "25 - 29": ["/** array of weekly deaths number**/"]
         }
       },
       "2010": {
         "Miasto Warszawa": {
-          "0 - 4": [
-            /** array of weekly deaths number**/
-          ]
+          "0 - 4": ["/** array of weekly deaths number**/"]
         }
       },
       "2011": {
         "Miasto Warszawa": {
-          "0 - 4": [
-            /** array of weekly deaths number**/
-          ]
+          "0 - 4": ["/** array of weekly deaths number**/"]
         }
       },
       "2012": {
         "Miasto Warszawa": {
-          "0 - 4": [
-            /** array of weekly deaths number**/
-          ]
+          "0 - 4": ["/** array of weekly deaths number**/"]
         }
       }
     }
@@ -154,10 +126,10 @@ https://gus-mortality-api.herokuapp.com/
 
 ## Scripts:
 
-- `dev` - runs api locally - on port `4004`
+- `dev` - runs API locally - on port `4004`
 - `test` - runs tests
 - `grab-data` - grabs excel spreadsheets from GUS page
-- `update` - extracts data to json file ```
+- `update` - extracts data to json file
 
 ## Stack used:
 
