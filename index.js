@@ -1,12 +1,21 @@
 const fs = require("fs");
 const express = require("express");
+const { mergeResponse } = require("./lib/merge");
 const cors = require("cors");
 const app = express();
-app.use(cors());
+const rateLimit = require("express-rate-limit");
 
 const LOCAL_PORT = 4004;
 const port = process.env.PORT || LOCAL_PORT;
 
+app.use(cors());
+
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 45,
+});
+
+app.use("/data", limiter);
 const data = JSON.parse(fs.readFileSync("./json/data.json"));
 
 app.get("/settings", (_, res) => {
@@ -16,19 +25,7 @@ app.get("/settings", (_, res) => {
 app.get("/data", (req, res) => {
   const { paths } = req.query;
   if (!paths) throw new Error("No paths provided!");
-  const ret = JSON.parse(paths).reduce(
-    (acc, path) => {
-      const [gender, year] = path.split(".");
-      if (!data[gender] || !data[gender][year])
-        throw new Error(`No data entries for path "${path}"`);
-      if (!acc[gender]) acc[gender] = {};
-      acc[gender][year] = data[gender][year];
-      return acc;
-    },
-
-    {}
-  );
-  res.json(ret);
+  res.json(mergeResponse(paths, data));
 });
 
 app.listen(port, () => {
