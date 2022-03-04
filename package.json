@@ -14,6 +14,7 @@
     "update": "node update.js",
     "start": "node index.js",
     "dev": "node index.js",
+    "test": "jest",
     "grab-data": "curl https://stat.gov.pl/download/gfx/portalinformacyjny/pl/defaultaktualnosci/5468/39/2/1/zgony_wg_tygodni.zip --output xlsx/data.zip; ditto -V -x -k --sequesterRsrc --rsrc xlsx/data.zip ./xlsx/"
   },
   "devDependencies": {

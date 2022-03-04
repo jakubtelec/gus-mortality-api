@@ -32,7 +32,12 @@ for (let fileName of files) {
       data[keyName][year] = yearData;
     }
     const rawData = sheet_to_json(values(workbook.Sheets)[sheetidx]);
-    for (const row of rawData.slice(6)) {
+
+    const startIndex = rawData.findIndex(
+      (rawDataItem) => rawDataItem["TABL."] == "Ogółem"
+    );
+
+    for (const row of rawData.slice(startIndex)) {
       const [age, code, name, ...byWeek] = values(row);
       if (!yearData[name]) yearData[name] = { [age]: {} };
       regions[name] = code;
